@@ -5,15 +5,55 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="@dimen/margin_mid"
     tools:context="com.github.yurinevenchenov1970.theweather.MainActivity">
 
+    <EditText
+        android:id="@+id/city_edit_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:paddingBottom="@dimen/margin_mid"
+        android:hint="@string/hint"/>
+
+     <TextView
+         android:id="@+id/forecast_length_start_text_view"
+         android:text="@string/forecast_within"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         app:layout_constraintTop_toBottomOf="@+id/city_edit_text"/>
+
+    <SeekBar
+        android:id="@+id/seek_bar"
+        style="@style/Widget.AppCompat.SeekBar.Discrete"
+        android:layout_width="133dp"
+        android:layout_height="wrap_content"
+        android:max="10"
+        android:progress="@string/days_number"
+        app:layout_constraintTop_toBottomOf="@+id/city_edit_text"
+        app:layout_constraintLeft_toRightOf="@+id/forecast_length_start_text_view"/>
+
     <TextView
+
+        android:id="@+id/forecast_length_text_view"
+        android:text="@string/days_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toBottomOf="@+id/city_edit_text"
+        app:layout_constraintLeft_toRightOf="@+id/seek_bar"/>
+
+    <TextView
+        android:id="@+id/forecast_length_end_text_view"
+        android:text="@string/day_2_4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/city_edit_text"
+        app:layout_constraintLeft_toRightOf="@+id/forecast_length_text_view"/>
+
+    <ListView
+        android:id="@+id/weather_list_view"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@+id/forecast_length_start_text_view"/>
 
 </android.support.constraint.ConstraintLayout>

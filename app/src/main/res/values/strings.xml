@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">TheWeather</string>
+    <string name="hint">введите город</string>
+    <string name="forecast_within">Прогноз на</string>
+    <string name="days_number">3</string>
+    <string name="day">день</string>
+    <string name="day_2_4">дня</string>
+    <string name="days">дней</string>
 </resources>
