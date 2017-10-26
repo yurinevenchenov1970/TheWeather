@@ -6,10 +6,19 @@ import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import com.github.yurinevenchenov1970.theweather.bean.BaseResponse;
+import com.github.yurinevenchenov1970.theweather.net.ApiClient;
+import com.github.yurinevenchenov1970.theweather.net.WeatherService;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
+
+    private WeatherService mService;
 
     @BindView(R.id.city_edit_text)
     TextView mCityTextView;
@@ -35,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         initUI();
+        getResponse();
     }
 
     private void initUI() {
@@ -73,5 +83,28 @@ public class MainActivity extends AppCompatActivity {
         } else if (progress >= 5 || progress == 0) {
             mForecastLengthEndTextView.setText(R.string.days);
         }
+    }
+
+    private void getResponse(){
+        String city = "Dnepr";
+
+        mService = ApiClient.getClient().create(WeatherService.class);
+        Call<BaseResponse> responseCall = mService.getWeather(city);
+        responseCall.enqueue(new Callback<BaseResponse>() {
+            @Override
+            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
+                BaseResponse baseResponse = response.body();
+                if (baseResponse != null) {
+                    System.out.println(baseResponse.toString());
+                } else {
+                    System.out.println("it is null");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<BaseResponse> call, Throwable t) {
+                System.out.println("failure " + t.getMessage());
+            }
+        });
     }
 }
