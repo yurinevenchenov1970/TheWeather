@@ -1,7 +1,6 @@
 package com.github.yurinevenchenov1970.theweather.test;
 
 import com.github.yurinevenchenov1970.theweather.bean.BaseJsonParserTest;
-import com.github.yurinevenchenov1970.theweather.bean.BaseResponse;
 import com.github.yurinevenchenov1970.theweather.bean.Forecast;
 import com.github.yurinevenchenov1970.theweather.bean.ForecastDate;
 import com.github.yurinevenchenov1970.theweather.bean.SimpleForecast;
@@ -17,23 +16,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Test for @link BaseResponse
+ * Test for @link Forecast
  *
  * @author Yuri Nevenchenov on 10/25/2017.
  */
-public class BaseResponseTest extends BaseJsonParserTest {
+public class ForecastTest extends BaseJsonParserTest {
 
-    public static final String TEST_FILE = "weather.json";
+    public static final String TEST_FILE = "forecast.json";
 
     @Test
     public void testParseObject() {
-        testParse(TEST_FILE, getBaseResponse(), BaseResponse.class);
-    }
-
-    private BaseResponse getBaseResponse() {
-        BaseResponse baseResponse = new BaseResponse();
-        baseResponse.setForecast(getForecast());
-        return baseResponse;
+        testParse(TEST_FILE, getForecast(), Forecast.class);
     }
 
     private Forecast getForecast() {

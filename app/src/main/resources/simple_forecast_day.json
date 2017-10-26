@@ -1,0 +1,73 @@
+{
+      "date": {
+          "epoch": "1341036000",
+          "pretty": "11:00 PM PDT on June 29, 2012",
+          "day": 29,
+          "month": 6,
+          "year": 2012,
+          "yday": 180,
+          "hour": 23,
+          "min": "00",
+          "sec": 0,
+          "isdst": "1",
+          "monthname": "June",
+          "weekday_short": "Fri",
+          "weekday": "Friday",
+          "ampm": "PM",
+          "tz_short": "PDT",
+          "tz_long": "America/Los_Angeles"
+        },
+        "period": 4,
+        "high": {
+          "fahrenheit": "68",
+          "celsius": "20"
+        },
+        "low": {
+          "fahrenheit": "52",
+          "celsius": "11"
+        },
+        "conditions": "Fog",
+        "icon": "partlycloudy",
+        "icon_url": "http://icons-ak.wxug.com/i/c/k/partlycloudy.gif",
+        "skyicon": "mostlysunny",
+        "pop": 0,
+        "qpf_allday": {
+          "in": 0.00,
+          "mm": 0.0
+        },
+        "qpf_day": {
+          "in": 0.00,
+          "mm": 0.0
+        },
+        "qpf_night": {
+          "in": 0.00,
+          "mm": 0.0
+        },
+        "snow_allday": {
+          "in": 0,
+          "cm": 0
+        },
+        "snow_day": {
+          "in": 0,
+          "cm": 0
+        },
+        "snow_night": {
+          "in": 0,
+          "cm": 0
+        },
+        "maxwind": {
+          "mph": 11,
+          "kph": 18,
+          "dir": "West",
+          "degrees": 267
+        },
+        "avewind": {
+          "mph": 10,
+          "kph": 16,
+          "dir": "West",
+          "degrees": 272
+        },
+        "avehumidity": 79,
+        "maxhumidity": 93,
+        "minhumidity": 63
+}
