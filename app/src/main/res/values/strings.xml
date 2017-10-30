@@ -6,4 +6,6 @@
     <string name="day">день</string>
     <string name="day_2_4">дня</string>
     <string name="days">дней</string>
+    <string name="kph_symbol">км/ч</string>
+    <string name="error_message">Something went wrong</string>
 </resources>

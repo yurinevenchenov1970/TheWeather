@@ -17,7 +17,7 @@ public class Forecast {
     private TextForecast mTextForecast;
 
     @JsonProperty("simpleforecast")
-    private SimpleForecast mSimpleForrecast;
+    private SimpleForecast mSimpleForecast;
 
     public Forecast() {
         // leave empty for Jackson
@@ -31,12 +31,12 @@ public class Forecast {
         mTextForecast = textForecast;
     }
 
-    public SimpleForecast getSimpleForrecast() {
-        return mSimpleForrecast;
+    public SimpleForecast getSimpleForecast() {
+        return mSimpleForecast;
     }
 
-    public void setSimpleForrecast(SimpleForecast simpleForrecast) {
-        mSimpleForrecast = simpleForrecast;
+    public void setSimpleForecast(SimpleForecast simpleForecast) {
+        mSimpleForecast = simpleForecast;
     }
 
     @JsonIgnore
@@ -46,13 +46,13 @@ public class Forecast {
         if (o == null || getClass() != o.getClass()) return false;
         Forecast forecast = (Forecast) o;
         return Objects.equal(mTextForecast, forecast.mTextForecast) &&
-                Objects.equal(mSimpleForrecast, forecast.mSimpleForrecast);
+                Objects.equal(mSimpleForecast, forecast.mSimpleForecast);
     }
 
     @JsonIgnore
     @Override
     public int hashCode() {
-        return Objects.hashCode(mTextForecast, mSimpleForrecast);
+        return Objects.hashCode(mTextForecast, mSimpleForecast);
     }
 
     @JsonIgnore
@@ -60,7 +60,7 @@ public class Forecast {
     public String toString() {
         return Objects.toStringHelper(this)
                 .add("mTextForecast", mTextForecast)
-                .add("mSimpleForrecast", mSimpleForrecast)
+                .add("mSimpleForrecast", mSimpleForecast)
                 .toString();
     }
 }

@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <dimen name="margin_low_mid">6dp</dimen>
     <dimen name="margin_mid">8dp</dimen>
+    <dimen name="divider_height">1dp</dimen>
 </resources>

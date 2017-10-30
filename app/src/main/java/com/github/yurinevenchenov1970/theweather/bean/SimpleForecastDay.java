@@ -14,7 +14,7 @@ import com.google.common.base.Objects;
 public class SimpleForecastDay {
 
     @JsonProperty("date")
-    private ForecastDate mForecasrDate;
+    private ForecastDate mForecastDate;
 
     @JsonProperty("period")
     private int mPeriod;
@@ -38,12 +38,12 @@ public class SimpleForecastDay {
         // leave empty for Jackson
     }
 
-    public ForecastDate getForecasrDate() {
-        return mForecasrDate;
+    public ForecastDate getForecastDate() {
+        return mForecastDate;
     }
 
-    public void setForecasrDate(ForecastDate forecastDate) {
-        mForecasrDate = forecastDate;
+    public void setForecastDate(ForecastDate forecastDate) {
+        mForecastDate = forecastDate;
     }
 
     public int getPeriod() {
@@ -103,7 +103,7 @@ public class SimpleForecastDay {
         if (o == null || getClass() != o.getClass()) return false;
         SimpleForecastDay that = (SimpleForecastDay) o;
         return mPeriod == that.mPeriod &&
-                Objects.equal(mForecasrDate, that.mForecasrDate) &&
+                Objects.equal(mForecastDate, that.mForecastDate) &&
                 Objects.equal(mHighTemperature, that.mHighTemperature) &&
                 Objects.equal(mLowTemperature, that.mLowTemperature) &&
                 Objects.equal(mIconUrl, that.mIconUrl) &&
@@ -114,14 +114,14 @@ public class SimpleForecastDay {
     @JsonIgnore
     @Override
     public int hashCode() {
-        return Objects.hashCode(mForecasrDate, mPeriod, mHighTemperature, mLowTemperature, mIconUrl, mMaxWind, mAveWind);
+        return Objects.hashCode(mForecastDate, mPeriod, mHighTemperature, mLowTemperature, mIconUrl, mMaxWind, mAveWind);
     }
 
     @JsonIgnore
     @Override
     public String toString() {
         return Objects.toStringHelper(this)
-                .add("mForecasrDate", mForecasrDate)
+                .add("mForecastDate", mForecastDate)
                 .add("mPeriod", mPeriod)
                 .add("mHighTemperature", mHighTemperature)
                 .add("mLowTemperature", mLowTemperature)
