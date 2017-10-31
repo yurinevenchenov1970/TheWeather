@@ -4,6 +4,8 @@
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
+
+              android:background="@color/bg_color"
               android:orientation="vertical">
 
     <LinearLayout
@@ -16,17 +18,16 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_weight="0.2"
+            android:layout_weight="0.18"
             android:paddingRight="@dimen/margin_mid"
+            android:textSize="@dimen/date_font_size"
             tools:text="26.11.2017"/>
 
         <ImageView
             android:id="@+id/weather_icon_image_view"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_weight="0.4"
-            app:srcCompat="@android:color/holo_blue_light"
             tools:background="@drawable/partlycloudy"/>
 
         <TextView
@@ -35,7 +36,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:layout_weight="0.2"
-            android:paddingLeft="@dimen/margin_mid"
+            android:paddingLeft="@dimen/margin_large"
+            android:textSize="@dimen/temperature_font_size"
             tools:text="26-36 C"/>
 
         <TextView
@@ -43,8 +45,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_weight="0.2"
+            android:layout_weight="0.4"
             android:paddingLeft="@dimen/margin_mid"
+            android:textSize="@dimen/wind_font_size"
             tools:text="WWS 20-35 kph"/>
 
     </LinearLayout>
@@ -53,6 +56,6 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/divider_height"
         android:layout_alignParentBottom="true"
-        android:background="@color/colorPrimaryDark"/>
+        android:background="@color/bg_main_color"/>
 
 </LinearLayout>

@@ -9,8 +9,10 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.yurinevenchenov1970.theweather.adapter.SimpleWeatherListAdapter;
 import com.github.yurinevenchenov1970.theweather.adapter.WeatherExtractor;
 import com.github.yurinevenchenov1970.theweather.bean.BaseResponse;
+import com.github.yurinevenchenov1970.theweather.bean.SimpleWeatherToShow;
 import com.github.yurinevenchenov1970.theweather.net.ApiClient;
 import com.github.yurinevenchenov1970.theweather.net.WeatherService;
 
@@ -44,8 +46,10 @@ public class MainActivity extends AppCompatActivity {
     ListView mWeatherListView;
 
     private int mForecastLength;
-    private List<String> mList;
-    private ArrayAdapter<String> arrayAdapter;
+    //    private List<String> mList;
+//    private ArrayAdapter<String> arrayAdapter;
+    private ArrayList<SimpleWeatherToShow> mList;
+    private SimpleWeatherListAdapter arrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,9 +58,11 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         initUI();
 
-        arrayAdapter = new ArrayAdapter<>(
+//        arrayAdapter = new ArrayAdapter<>(
+        arrayAdapter = new SimpleWeatherListAdapter(
                 this,
                 android.R.layout.simple_list_item_1,
+//                R.layout.weather_list_item,
                 mList);
         mWeatherListView.setAdapter(arrayAdapter);
     }
@@ -90,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
         mList = new ArrayList<>();
-        mList.add("Here will be text forecast after city input");
+//        mList.add("Here will be text forecast after city input");
     }
 
     private void fillForecastLength(int progress) {
@@ -113,6 +119,7 @@ public class MainActivity extends AppCompatActivity {
         if (city.length() != 0) {
             // TODO: 10/30/2017 add autocomplete API here
             getResponse(city);
+
         }
     }
 
@@ -139,22 +146,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fillForecastListView(BaseResponse baseResponse) {
-        if(mForecastLength==0){
+        if (mForecastLength == 0) {
             mForecastLength = Integer.parseInt(mForecastLengthTextView.getText().toString());
         }
         formForecastList(baseResponse, mForecastLength);
         arrayAdapter.notifyDataSetChanged();
     }
 
-    private void formForecastList(BaseResponse baseResponse, int forecastLength){
-        List<String> weatherList = WeatherExtractor.extractTextWeatherToShow(baseResponse, forecastLength);
+    private void formForecastList(BaseResponse baseResponse, int forecastLength) {
+//        List<String> weatherList = WeatherExtractor.extractTextWeatherToShow(baseResponse, forecastLength);
+        List<SimpleWeatherToShow> weatherList = WeatherExtractor.extractSimpleWeatherToShow(baseResponse, forecastLength);
         mList.clear();
-        for (String oneDayWeather : weatherList) {
+//        for (String oneDayWeather : weatherList) {
+        for (SimpleWeatherToShow oneDayWeather : weatherList) {
             mList.add(oneDayWeather);
         }
     }
 
-    private void showErrorMessage(){
+    private void showErrorMessage() {
         Toast.makeText(this, R.string.error_message, Toast.LENGTH_LONG).show();
     }
 }

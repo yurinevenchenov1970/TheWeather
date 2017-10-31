@@ -2,5 +2,11 @@
 <resources>
     <dimen name="margin_low_mid">6dp</dimen>
     <dimen name="margin_mid">8dp</dimen>
+    <dimen name="margin_high_mid">12dp</dimen>
+    <dimen name="margin_large">18dp</dimen>
     <dimen name="divider_height">1dp</dimen>
+    <dimen name="font_size">18sp</dimen>
+    <dimen name="date_font_size">18sp</dimen>
+    <dimen name="temperature_font_size">24sp</dimen>
+    <dimen name="wind_font_size">18sp</dimen>
 </resources>

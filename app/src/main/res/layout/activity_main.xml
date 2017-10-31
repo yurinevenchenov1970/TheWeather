@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="@dimen/margin_mid"
+    android:background="@color/bg_main_color"
     tools:context="com.github.yurinevenchenov1970.theweather.MainActivity">
 
     <EditText
@@ -13,48 +14,58 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:paddingBottom="@dimen/margin_mid"
-        android:hint="@string/hint"/>
+        android:hint="@string/hint"
+        android:paddingTop="@dimen/margin_high_mid"
+        android:paddingBottom="@dimen/margin_high_mid"
+        android:textSize="@dimen/font_size"/>
 
-     <TextView
-         android:id="@+id/forecast_length_start_text_view"
-         android:text="@string/forecast_within"
-         android:layout_width="wrap_content"
-         android:layout_height="wrap_content"
-         app:layout_constraintTop_toBottomOf="@+id/city_edit_text"/>
-
-    <SeekBar
-        android:id="@+id/seek_bar"
-        style="@style/Widget.AppCompat.SeekBar.Discrete"
-        android:layout_width="133dp"
+    <LinearLayout
+        android:id="@+id/period_adjust_bar"
+        android:layout_width="352dp"
         android:layout_height="wrap_content"
-        android:max="10"
-        android:progress="@string/days_number"
-        app:layout_constraintTop_toBottomOf="@+id/city_edit_text"
-        app:layout_constraintLeft_toRightOf="@+id/forecast_length_start_text_view"/>
+        android:paddingBottom="@dimen/margin_high_mid"
+        app:layout_constraintTop_toBottomOf="@+id/city_edit_text">
 
-    <TextView
+        <TextView
+            android:id="@+id/forecast_length_start_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/forecast_within"
+            android:textSize="@dimen/font_size"/>
 
-        android:id="@+id/forecast_length_text_view"
-        android:text="@string/days_number"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/city_edit_text"
-        app:layout_constraintLeft_toRightOf="@+id/seek_bar"/>
+        <SeekBar
+            android:id="@+id/seek_bar"
+            style="@style/Widget.AppCompat.SeekBar.Discrete"
+            android:layout_width="133dp"
+            android:layout_height="wrap_content"
+            android:max="10"
+            android:progress="@string/days_number"
+            app:layout_constraintLeft_toRightOf="@+id/forecast_length_start_text_view"/>
 
-    <TextView
-        android:id="@+id/forecast_length_end_text_view"
-        android:text="@string/day_2_4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/city_edit_text"
-        app:layout_constraintLeft_toRightOf="@+id/forecast_length_text_view"/>
+        <TextView
+            android:id="@+id/forecast_length_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/days_number"
+            android:textSize="@dimen/font_size"
+            app:layout_constraintLeft_toRightOf="@+id/seek_bar"/>
+
+        <TextView
+            android:id="@+id/forecast_length_end_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_low_mid"
+            android:text="@string/day_2_4"
+            android:textSize="@dimen/font_size"
+            app:layout_constraintLeft_toRightOf="@+id/forecast_length_text_view"/>
+
+    </LinearLayout>
 
     <ListView
         android:id="@+id/weather_list_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/seek_bar">
+        app:layout_constraintTop_toBottomOf="@+id/period_adjust_bar">
     </ListView>
 
 </android.support.constraint.ConstraintLayout>
