@@ -7,12 +7,12 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
  * @author Yuri Nevenchenov on 10/26/2017.
  */
 
-public class ApiClient {
+public class ApiClientCity {
 
-    public static final String BASE_URL = "http://api.wunderground.com/api/636b6d8468f29aa8/";
+    private static final String BASE_URL = "http://autocomplete.wunderground.com/";
     private static Retrofit sRetrofit = null;
 
-    private ApiClient() {
+    private ApiClientCity() {
         throw new IllegalStateException("can't create an object");
     }
 
