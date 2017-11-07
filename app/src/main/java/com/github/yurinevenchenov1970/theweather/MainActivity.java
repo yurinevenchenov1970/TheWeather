@@ -2,7 +2,6 @@ package com.github.yurinevenchenov1970.theweather;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SeekBar;
@@ -12,8 +11,11 @@ import android.widget.Toast;
 import com.github.yurinevenchenov1970.theweather.adapter.SimpleWeatherListAdapter;
 import com.github.yurinevenchenov1970.theweather.adapter.WeatherExtractor;
 import com.github.yurinevenchenov1970.theweather.bean.BaseResponse;
+import com.github.yurinevenchenov1970.theweather.bean.CityList;
 import com.github.yurinevenchenov1970.theweather.bean.SimpleWeatherToShow;
-import com.github.yurinevenchenov1970.theweather.net.ApiClient;
+import com.github.yurinevenchenov1970.theweather.net.ApiClientCity;
+import com.github.yurinevenchenov1970.theweather.net.ApiClientWeather;
+import com.github.yurinevenchenov1970.theweather.net.CityService;
 import com.github.yurinevenchenov1970.theweather.net.WeatherService;
 
 import java.util.ArrayList;
@@ -28,7 +30,8 @@ import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
 
-    private WeatherService mService;
+    private CityService mCityService;
+    private WeatherService mWeatherService;
 
     @BindView(R.id.city_edit_text)
     EditText mCityTextView;
@@ -69,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
     @OnTextChanged(R.id.city_edit_text)
     void onCityEditTextChanged(CharSequence city, int start, int count, int after) {
-        getResponse(city.toString());
+        getFullCity(city.toString());
     }
 
     private void initUI() {
@@ -123,10 +126,32 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void getFullCity(String partialCity) {
+        mCityService = ApiClientCity.getClient().create(CityService.class);
+        Call<CityList> responseCall = mCityService.getCity(partialCity);
+        responseCall.enqueue(new Callback<CityList>() {
+            @Override
+            public void onResponse(Call<CityList> call, Response<CityList> response) {
+                CityList cityResponse = response.body();
+                if (cityResponse != null) {
+                    // TODO: 10/31/2017 pop up list with clickListener to choose city from
+                    System.out.println(cityResponse.toString());
+                } else {
+                    showErrorMessage();
+                }
+
+            }
+
+            @Override
+            public void onFailure(Call<CityList> call, Throwable t) {
+                System.out.println("failure " + t.getMessage());
+            }
+        });
+    }
+
     private void getResponse(String city) {
-        mService = ApiClient.getClient().create(WeatherService.class);
-        // TODO: 10/27/2017 change "Dnepr" to city in the below line
-        Call<BaseResponse> responseCall = mService.getWeather("Dnepr");
+        mWeatherService = ApiClientWeather.getClient().create(WeatherService.class);
+        Call<BaseResponse> responseCall = mWeatherService.getWeather(city);
         responseCall.enqueue(new Callback<BaseResponse>() {
             @Override
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
