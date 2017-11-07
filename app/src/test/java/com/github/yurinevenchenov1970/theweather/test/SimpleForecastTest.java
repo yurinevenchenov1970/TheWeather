@@ -49,7 +49,7 @@ public class SimpleForecastTest extends BaseJsonParserTest {
                                               int maxWindSpeed, String maxWindDir,
                                               int aveWindSpeed, String aveWindDir) {
         SimpleForecastDay sfd = new SimpleForecastDay();
-        sfd.setForecasrDate(getDate(day, month, year));
+        sfd.setForecastDate(getDate(day, month, year));
         sfd.setPeriod(period);
         sfd.setHighTemperature(getTemperature(hiTemper));
         sfd.setLowTemperature(getTemperature(lowTemper));

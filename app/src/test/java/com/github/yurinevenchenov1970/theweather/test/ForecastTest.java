@@ -31,7 +31,7 @@ public class ForecastTest extends BaseJsonParserTest {
 
     private Forecast getForecast() {
         Forecast forecast = new Forecast();
-        forecast.setSimpleForrecast(getSimpleForecast());
+        forecast.setSimpleForecast(getSimpleForecast());
         forecast.setTextForecast(getTextForecast());
         return forecast;
     }
@@ -67,7 +67,7 @@ public class ForecastTest extends BaseJsonParserTest {
                                               int maxWindSpeed, String maxWindDir,
                                               int aveWindSpeed, String aveWindDir) {
         SimpleForecastDay sfd = new SimpleForecastDay();
-        sfd.setForecasrDate(getDate(day, month, year));
+        sfd.setForecastDate(getDate(day, month, year));
         sfd.setPeriod(period);
         sfd.setHighTemperature(getTemperature(hiTemper));
         sfd.setLowTemperature(getTemperature(lowTemper));
