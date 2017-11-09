@@ -29,8 +29,8 @@ public class CityListTest extends BaseJsonParserTest {
         return cl;
     }
 
-    private List<City> formCityList() {
-        List<City> cl = new ArrayList<>();
+    private ArrayList<City> formCityList() {
+        ArrayList<City> cl = new ArrayList<>();
         cl.add(createCity("Dnipropetrovs'k, Ukraine"));
         cl.add(createCity("Dniprodzerzhyns'k, Ukraine"));
         cl.add(createCity("Dniprorudne, Ukraine"));

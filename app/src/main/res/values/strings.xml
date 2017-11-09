@@ -8,4 +8,5 @@
     <string name="days">дней</string>
     <string name="kph_symbol">км/ч</string>
     <string name="error_message">Something went wrong</string>
+    <string name="city_error_message">Введите корректно город... Скорее всего, Вы выбрали из списка страну.</string>
 </resources>

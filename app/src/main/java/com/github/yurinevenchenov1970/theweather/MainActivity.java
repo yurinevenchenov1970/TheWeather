@@ -2,6 +2,9 @@ package com.github.yurinevenchenov1970.theweather;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.SeekBar;
@@ -11,6 +14,7 @@ import android.widget.Toast;
 import com.github.yurinevenchenov1970.theweather.adapter.SimpleWeatherListAdapter;
 import com.github.yurinevenchenov1970.theweather.adapter.WeatherExtractor;
 import com.github.yurinevenchenov1970.theweather.bean.BaseResponse;
+import com.github.yurinevenchenov1970.theweather.bean.City;
 import com.github.yurinevenchenov1970.theweather.bean.CityList;
 import com.github.yurinevenchenov1970.theweather.bean.SimpleWeatherToShow;
 import com.github.yurinevenchenov1970.theweather.net.ApiClientCity;
@@ -32,9 +36,16 @@ public class MainActivity extends AppCompatActivity {
 
     private CityService mCityService;
     private WeatherService mWeatherService;
+    private int mForecastLength;
+    private SimpleWeatherListAdapter mWeatherListAdapter;
+
+    private ArrayList<SimpleWeatherToShow> mWeatherList = new ArrayList<>();
 
     @BindView(R.id.city_edit_text)
     EditText mCityTextView;
+
+    @BindView(R.id.cities_list_view)
+    ListView mCitiesListView;
 
     @BindView(R.id.seek_bar)
     SeekBar mSeekBar;
@@ -48,12 +59,6 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.weather_list_view)
     ListView mWeatherListView;
 
-    private int mForecastLength;
-    //    private List<String> mList;
-//    private ArrayAdapter<String> arrayAdapter;
-    private ArrayList<SimpleWeatherToShow> mList;
-    private SimpleWeatherListAdapter arrayAdapter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,18 +66,16 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         initUI();
 
-//        arrayAdapter = new ArrayAdapter<>(
-        arrayAdapter = new SimpleWeatherListAdapter(
+        mWeatherListAdapter = new SimpleWeatherListAdapter(
                 this,
                 android.R.layout.simple_list_item_1,
-//                R.layout.weather_list_item,
-                mList);
-        mWeatherListView.setAdapter(arrayAdapter);
+                mWeatherList);
+        mWeatherListView.setAdapter(mWeatherListAdapter);
     }
 
     @OnTextChanged(R.id.city_edit_text)
     void onCityEditTextChanged(CharSequence city, int start, int count, int after) {
-        getFullCity(city.toString());
+        getFullCity(city.toString(), count);
     }
 
     private void initUI() {
@@ -98,8 +101,6 @@ public class MainActivity extends AppCompatActivity {
                         checkCityFilling();
                     }
                 });
-        mList = new ArrayList<>();
-//        mList.add("Here will be text forecast after city input");
     }
 
     private void fillForecastLength(int progress) {
@@ -120,13 +121,11 @@ public class MainActivity extends AppCompatActivity {
     private void checkCityFilling() {
         String city = mCityTextView.getText().toString();
         if (city.length() != 0) {
-            // TODO: 10/30/2017 add autocomplete API here
             getResponse(city);
-
         }
     }
 
-    private void getFullCity(String partialCity) {
+    private void getFullCity(String partialCity, final int numberOfCharsChanged) {
         mCityService = ApiClientCity.getClient().create(CityService.class);
         Call<CityList> responseCall = mCityService.getCity(partialCity);
         responseCall.enqueue(new Callback<CityList>() {
@@ -134,12 +133,10 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<CityList> call, Response<CityList> response) {
                 CityList cityResponse = response.body();
                 if (cityResponse != null) {
-                    // TODO: 10/31/2017 pop up list with clickListener to choose city from
-                    System.out.println(cityResponse.toString());
+                    popUpCitiesList(cityResponse, numberOfCharsChanged);
                 } else {
                     showErrorMessage();
                 }
-
             }
 
             @Override
@@ -147,6 +144,44 @@ public class MainActivity extends AppCompatActivity {
                 System.out.println("failure " + t.getMessage());
             }
         });
+    }
+
+    private void popUpCitiesList(CityList list, int numberOfCharsChanged) {
+        final ArrayList<String> stringCitiesList = convertCityListToStringList(list);
+        ArrayAdapter arrayAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1,
+                stringCitiesList);
+        mCitiesListView.setAdapter(arrayAdapter);
+        if (numberOfCharsChanged == 0) {
+            showCitiesList();
+        }
+
+        mCitiesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String city = stringCitiesList.get(position);
+                hideCitiesList();
+                mCityTextView.setText(city);
+                getResponse(city);
+            }
+        });
+    }
+
+    private ArrayList<String> convertCityListToStringList(CityList list) {
+        ArrayList<String> stringList = new ArrayList<>();
+        for (City city : list.getCityList()) {
+            stringList.add(city.getCityName());
+        }
+        return stringList;
+    }
+
+    private void showCitiesList() {
+        mCitiesListView.setVisibility(View.VISIBLE);
+        mCitiesListView.bringToFront();
+    }
+
+    private void hideCitiesList() {
+        mCitiesListView.setVisibility(View.GONE);
     }
 
     private void getResponse(String city) {
@@ -175,20 +210,26 @@ public class MainActivity extends AppCompatActivity {
             mForecastLength = Integer.parseInt(mForecastLengthTextView.getText().toString());
         }
         formForecastList(baseResponse, mForecastLength);
-        arrayAdapter.notifyDataSetChanged();
+        mWeatherListAdapter.notifyDataSetChanged();
     }
 
     private void formForecastList(BaseResponse baseResponse, int forecastLength) {
-//        List<String> weatherList = WeatherExtractor.extractTextWeatherToShow(baseResponse, forecastLength);
         List<SimpleWeatherToShow> weatherList = WeatherExtractor.extractSimpleWeatherToShow(baseResponse, forecastLength);
-        mList.clear();
-//        for (String oneDayWeather : weatherList) {
-        for (SimpleWeatherToShow oneDayWeather : weatherList) {
-            mList.add(oneDayWeather);
+        if (weatherList == null) {
+            showCityErrorMessage();
+        } else {
+            mWeatherList.clear();
+            for (SimpleWeatherToShow oneDayWeather : weatherList) {
+                mWeatherList.add(oneDayWeather);
+            }
         }
     }
 
     private void showErrorMessage() {
         Toast.makeText(this, R.string.error_message, Toast.LENGTH_LONG).show();
+    }
+
+    private void showCityErrorMessage() {
+        Toast.makeText(this, R.string.city_error_message, Toast.LENGTH_LONG).show();
     }
 }

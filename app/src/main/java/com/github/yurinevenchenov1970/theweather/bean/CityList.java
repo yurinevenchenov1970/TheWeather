@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Objects;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,17 +15,17 @@ import java.util.List;
 public class CityList {
 
     @JsonProperty("RESULTS")
-    private List<City> mCityList;
+    private ArrayList<City> mCityList;
 
     public CityList() {
         // leave empty for Jackson
     }
 
-    public List<City> getCityList() {
+    public ArrayList<City> getCityList() {
         return mCityList;
     }
 
-    public void setCityList(List<City> cityList) {
+    public void setCityList(ArrayList<City> cityList) {
         mCityList = cityList;
     }
 
