@@ -12,15 +12,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.yurinevenchenov1970.theweather.adapter.SimpleWeatherListAdapter;
-import com.github.yurinevenchenov1970.theweather.adapter.WeatherExtractor;
-import com.github.yurinevenchenov1970.theweather.bean.BaseResponse;
-import com.github.yurinevenchenov1970.theweather.bean.City;
-import com.github.yurinevenchenov1970.theweather.bean.CityList;
 import com.github.yurinevenchenov1970.theweather.bean.SimpleWeatherToShow;
-import com.github.yurinevenchenov1970.theweather.net.ApiClientCity;
-import com.github.yurinevenchenov1970.theweather.net.ApiClientWeather;
-import com.github.yurinevenchenov1970.theweather.net.CityService;
-import com.github.yurinevenchenov1970.theweather.net.WeatherService;
+import com.github.yurinevenchenov1970.theweather.presenter.MainPresenter;
+import com.github.yurinevenchenov1970.theweather.presenter.MainPresenterImpl;
+import com.github.yurinevenchenov1970.theweather.view.MainView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,18 +23,17 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnTextChanged;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MainView {
 
-    private CityService mCityService;
-    private WeatherService mWeatherService;
+    private MainPresenter mMainPresenter;
     private int mForecastLength;
+    private int mCityUserInputLength;
+    private String mCity;
     private SimpleWeatherListAdapter mWeatherListAdapter;
-
+    private ArrayAdapter mCitiesListAdapter;
     private ArrayList<SimpleWeatherToShow> mWeatherList = new ArrayList<>();
+    private ArrayList<String> mAvailableCitiesList = new ArrayList<>();
 
     @BindView(R.id.city_edit_text)
     EditText mCityTextView;
@@ -64,43 +58,80 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        initUI();
+        mMainPresenter = new MainPresenterImpl(this);
+        mForecastLength = Integer.parseInt(mForecastLengthTextView.getText().toString());
+        initForecastLengthFader();
+    }
 
+    @OnTextChanged(R.id.city_edit_text)
+    void onCityEditTextChanged(CharSequence city, int start, int count, int after) {
+        mCityUserInputLength = city.toString().length();
+        mMainPresenter.treatCityViewChanges(city.toString());
+    }
+
+    @Override
+    public void showAvailableCitiesList(List<String> availableCitiesList) {
+        mAvailableCitiesList = (ArrayList) availableCitiesList;
+        mCitiesListAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_list_item_1,
+                mAvailableCitiesList);
+        mCitiesListView.setAdapter(mCitiesListAdapter);
+
+        if (mCityUserInputLength > 0) {
+            showCitiesList();
+        } else {
+            hideCitiesList();
+            mWeatherList.clear();
+            mWeatherListAdapter.notifyDataSetChanged();
+        }
+
+        mCitiesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mCity = mAvailableCitiesList.get(position);
+                mCityTextView.setText(mCity);
+                hideCitiesList();
+                mMainPresenter.treatCitySelection(mCity);
+            }
+        });
+    }
+
+    @Override
+    public int getForecastLength() {
+        return mForecastLength;
+    }
+
+    private void initForecastLengthFader() {
+        mSeekBar.setOnSeekBarChangeListener(
+                new SeekBar.OnSeekBarChangeListener() {
+
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar,
+                                                  int progressValue, boolean fromUser) {
+                        mForecastLength = progressValue;
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+                        fillForecastLength(mForecastLength);
+                        mMainPresenter.treatForecastLengthChanges(mForecastLength);
+                    }
+                });
+    }
+
+    @Override
+    public void showForecast(List<SimpleWeatherToShow> forecastList) {
+        mWeatherList = (ArrayList) forecastList;
         mWeatherListAdapter = new SimpleWeatherListAdapter(
                 this,
                 android.R.layout.simple_list_item_1,
                 mWeatherList);
         mWeatherListView.setAdapter(mWeatherListAdapter);
-    }
-
-    @OnTextChanged(R.id.city_edit_text)
-    void onCityEditTextChanged(CharSequence city, int start, int count, int after) {
-        getFullCity(city.toString(), count);
-    }
-
-    private void initUI() {
-        mSeekBar.setOnSeekBarChangeListener(
-                new SeekBar.OnSeekBarChangeListener() {
-                    int progress = 0;
-
-                    @Override
-                    public void onProgressChanged(SeekBar seekBar,
-                                                  int progressValue, boolean fromUser) {
-                        progress = progressValue;
-                        mForecastLength = progress;
-                    }
-
-                    @Override
-                    public void onStartTrackingTouch(SeekBar seekBar) {
-
-                    }
-
-                    @Override
-                    public void onStopTrackingTouch(SeekBar seekBar) {
-                        fillForecastLength(progress);
-                        checkCityFilling();
-                    }
-                });
+        hideCitiesList();
     }
 
     private void fillForecastLength(int progress) {
@@ -118,63 +149,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void checkCityFilling() {
-        String city = mCityTextView.getText().toString();
-        if (city.length() != 0) {
-            getResponse(city);
-        }
-    }
-
-    private void getFullCity(String partialCity, final int numberOfCharsChanged) {
-        mCityService = ApiClientCity.getClient().create(CityService.class);
-        Call<CityList> responseCall = mCityService.getCity(partialCity);
-        responseCall.enqueue(new Callback<CityList>() {
-            @Override
-            public void onResponse(Call<CityList> call, Response<CityList> response) {
-                CityList cityResponse = response.body();
-                if (cityResponse != null) {
-                    popUpCitiesList(cityResponse, numberOfCharsChanged);
-                } else {
-                    showErrorMessage();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<CityList> call, Throwable t) {
-                System.out.println("failure " + t.getMessage());
-            }
-        });
-    }
-
-    private void popUpCitiesList(CityList list, int numberOfCharsChanged) {
-        final ArrayList<String> stringCitiesList = convertCityListToStringList(list);
-        ArrayAdapter arrayAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_list_item_1,
-                stringCitiesList);
-        mCitiesListView.setAdapter(arrayAdapter);
-        if (numberOfCharsChanged == 0) {
-            showCitiesList();
-        }
-
-        mCitiesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String city = stringCitiesList.get(position);
-                hideCitiesList();
-                mCityTextView.setText(city);
-                getResponse(city);
-            }
-        });
-    }
-
-    private ArrayList<String> convertCityListToStringList(CityList list) {
-        ArrayList<String> stringList = new ArrayList<>();
-        for (City city : list.getCityList()) {
-            stringList.add(city.getCityName());
-        }
-        return stringList;
-    }
-
     private void showCitiesList() {
         mCitiesListView.setVisibility(View.VISIBLE);
         mCitiesListView.bringToFront();
@@ -184,52 +158,7 @@ public class MainActivity extends AppCompatActivity {
         mCitiesListView.setVisibility(View.GONE);
     }
 
-    private void getResponse(String city) {
-        mWeatherService = ApiClientWeather.getClient().create(WeatherService.class);
-        Call<BaseResponse> responseCall = mWeatherService.getWeather(city);
-        responseCall.enqueue(new Callback<BaseResponse>() {
-            @Override
-            public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
-                BaseResponse baseResponse = response.body();
-                if (baseResponse != null) {
-                    fillForecastListView(baseResponse);
-                } else {
-                    showErrorMessage();
-                }
-            }
-
-            @Override
-            public void onFailure(Call<BaseResponse> call, Throwable t) {
-                System.out.println("failure " + t.getMessage());
-            }
-        });
-    }
-
-    private void fillForecastListView(BaseResponse baseResponse) {
-        if (mForecastLength == 0) {
-            mForecastLength = Integer.parseInt(mForecastLengthTextView.getText().toString());
-        }
-        formForecastList(baseResponse, mForecastLength);
-        mWeatherListAdapter.notifyDataSetChanged();
-    }
-
-    private void formForecastList(BaseResponse baseResponse, int forecastLength) {
-        List<SimpleWeatherToShow> weatherList = WeatherExtractor.extractSimpleWeatherToShow(baseResponse, forecastLength);
-        if (weatherList == null) {
-            showCityErrorMessage();
-        } else {
-            mWeatherList.clear();
-            for (SimpleWeatherToShow oneDayWeather : weatherList) {
-                mWeatherList.add(oneDayWeather);
-            }
-        }
-    }
-
-    private void showErrorMessage() {
-        Toast.makeText(this, R.string.error_message, Toast.LENGTH_LONG).show();
-    }
-
-    private void showCityErrorMessage() {
-        Toast.makeText(this, R.string.city_error_message, Toast.LENGTH_LONG).show();
+    public void showError(String errorDescription) {
+        Toast.makeText(this, errorDescription, Toast.LENGTH_LONG).show();
     }
 }

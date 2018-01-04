@@ -1,6 +1,6 @@
 package com.github.yurinevenchenov1970.theweather.net;
 
-import com.github.yurinevenchenov1970.theweather.bean.CityList;
+import com.github.yurinevenchenov1970.theweather.bean.CitiesList;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -13,5 +13,5 @@ import retrofit2.http.Query;
 public interface CityService {
 
     @GET("aq")
-    Call<CityList> getCity(@Query("query") String city);
+    Call<CitiesList> getCity(@Query("query") String city);
 }

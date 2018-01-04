@@ -2,7 +2,6 @@ package com.github.yurinevenchenov1970.theweather.test;
 
 import com.github.yurinevenchenov1970.theweather.bean.BaseJsonParserTest;
 import com.github.yurinevenchenov1970.theweather.bean.City;
-import com.github.yurinevenchenov1970.theweather.bean.CityList;
 
 import org.junit.Test;
 

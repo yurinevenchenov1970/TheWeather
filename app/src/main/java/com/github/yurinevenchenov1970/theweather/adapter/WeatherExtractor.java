@@ -25,7 +25,7 @@ public class WeatherExtractor {
         TextForecast textForecast = response.getForecast().getTextForecast();
         List<TextForecastDay> list = textForecast.getTextForecastDayList();
         List<String> textWeatherArray = new ArrayList<>();
-        for (int i = 0; i <= forecastLength; i++) {
+        for (int i = 0; i < forecastLength; i++) {
             String dayInForecast;
             int period = list.get(i).getPeriod();
             if (period == 0) {
@@ -38,12 +38,12 @@ public class WeatherExtractor {
         return textWeatherArray;
     }
 
-    public static List<SimpleWeatherToShow> extractSimpleWeatherToShow(BaseResponse response, int forecastLength) {
+    public static List<SimpleWeatherToShow> extractSimpleWeatherToShow(BaseResponse response) {
         List<SimpleWeatherToShow> simpleWeatherArray = new ArrayList<>();
         try {
             SimpleForecast simpleForecast = response.getForecast().getSimpleForecast();
             List<SimpleForecastDay> simpleForecastDayList = simpleForecast.getSimpleForecastDayList();
-            for (int i = 0; i <= forecastLength; i++) {
+            for (int i = 0; i < simpleForecastDayList.size(); i++) {
                 simpleWeatherArray.add(convertSimpleForecastDayToWeatherToShow(simpleForecastDayList.get(i)));
             }
         } catch (NullPointerException e) {

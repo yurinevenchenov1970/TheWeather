@@ -3,6 +3,7 @@ package com.github.yurinevenchenov1970.theweather.bean;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
 
 /**
@@ -58,7 +59,7 @@ public class Wind {
     @JsonIgnore
     @Override
     public String toString() {
-        return Objects.toStringHelper(this)
+        return MoreObjects.toStringHelper(this)
                 .add("mWindDirection", mWindDirection)
                 .add("mWindSpeed", mWindSpeed)
                 .toString();

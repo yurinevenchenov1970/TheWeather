@@ -9,4 +9,6 @@
     <string name="kph_symbol">км/ч</string>
     <string name="error_message">Something went wrong</string>
     <string name="city_error_message">Введите корректно город... Скорее всего, Вы выбрали из списка страну.</string>
+    <string name="no_server_responce">No response from server</string>
+    <string name="missing_forecast_for_the_city">There is no forecast for the city... :-(</string>
 </resources>

@@ -57,7 +57,8 @@ public class SimpleWeatherListAdapter extends ArrayAdapter<SimpleWeatherToShow> 
         convertView = inflater.inflate(R.layout.weather_list_item, null);
         ButterKnife.bind(this, convertView);
         mDateTextView.setText(mSimpleWeatherToShow.get(position).getDataString());
-        Picasso.with(AppToGetContext.getContext()).load(mSimpleWeatherToShow.get(position).getIconPath()).into(mIconImageView);
+        Picasso.with(AppToGetContext.getContext()).load(mSimpleWeatherToShow.get(position).getIconPath())
+                .into(mIconImageView);
         mTemperatureTextView.setText(mSimpleWeatherToShow.get(position).getTemperatureString());
         mWindTextView.setText(mSimpleWeatherToShow.get(position).getWindString());
         return convertView;

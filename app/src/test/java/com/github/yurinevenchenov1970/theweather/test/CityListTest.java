@@ -2,12 +2,11 @@ package com.github.yurinevenchenov1970.theweather.test;
 
 import com.github.yurinevenchenov1970.theweather.bean.BaseJsonParserTest;
 import com.github.yurinevenchenov1970.theweather.bean.City;
-import com.github.yurinevenchenov1970.theweather.bean.CityList;
+import com.github.yurinevenchenov1970.theweather.bean.CitiesList;
 
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Test for @link SimpleForecast
@@ -20,12 +19,12 @@ public class CityListTest extends BaseJsonParserTest {
 
     @Test
     public void testParseObject() {
-        testParse(TEST_FILE, getCityList(), CityList.class);
+        testParse(TEST_FILE, getCityList(), CitiesList.class);
     }
 
-    private CityList getCityList() {
-        CityList cl = new CityList();
-        cl.setCityList(formCityList());
+    private CitiesList getCityList() {
+        CitiesList cl = new CitiesList();
+        cl.setCitiesList(formCityList());
         return cl;
     }
 
