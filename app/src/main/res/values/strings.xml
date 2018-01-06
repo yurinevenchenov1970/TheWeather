@@ -1,14 +1,14 @@
 <resources>
-    <string name="app_name">TheWeather</string>
-    <string name="hint">введите город</string>
+    <string name="app_name">Погода</string>
+    <string name="hint">введите город латиницей</string>
     <string name="forecast_within">Прогноз на</string>
     <string name="days_number">3</string>
     <string name="day">день</string>
     <string name="day_2_4">дня</string>
     <string name="days">дней</string>
     <string name="kph_symbol">км/ч</string>
-    <string name="error_message">Something went wrong</string>
+    <string name="error_message">Что-то пошло не так...</string>
     <string name="city_error_message">Введите корректно город... Скорее всего, Вы выбрали из списка страну.</string>
-    <string name="no_server_responce">No response from server</string>
-    <string name="missing_forecast_for_the_city">There is no forecast for the city... :-(</string>
+    <string name="no_server_responce">Нет ответа с сервера</string>
+    <string name="missing_forecast_for_the_city">Нет прогноза для этого города... :-(</string>
 </resources>

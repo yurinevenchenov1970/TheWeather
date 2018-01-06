@@ -11,11 +11,7 @@ import java.util.List;
 public interface MainPresenter {
     void treatCityViewChanges(String partialCity);
 
-    void getCitiesList(String partialCity);
-
     void treatCityResponse(List<String> citiesList);
-
-    void showAvailableCitiesList(List<String> citiesList);
 
     void treatCitySelection(String city);
 
@@ -27,7 +23,7 @@ public interface MainPresenter {
 
     void showForecast(int forecastLength);
 
-    void treatError(String errorDescription);
+    void treatError(int errorDescription);
 
-    void showError(String errorDescription);
+    void showError(int errorDescription);
 }

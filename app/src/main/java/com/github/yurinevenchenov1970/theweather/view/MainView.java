@@ -15,5 +15,9 @@ public interface MainView {
 
     void showForecast(List<SimpleWeatherToShow> forecastList);
 
-    void showError(String errorDescription);
+    void showError(int errorDescription);
+
+    void hideCitiesList();
+
+    void hideForecast();
 }

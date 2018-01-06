@@ -1,6 +1,7 @@
 package com.github.yurinevenchenov1970.theweather.model;
 
-import com.github.yurinevenchenov1970.theweather.AppToGetContext;
+import android.util.Log;
+
 import com.github.yurinevenchenov1970.theweather.R;
 import com.github.yurinevenchenov1970.theweather.adapter.WeatherExtractor;
 import com.github.yurinevenchenov1970.theweather.bean.BaseResponse;
@@ -31,10 +32,6 @@ public class ForecastFormingModel extends MainModel {
     }
 
     public void getForecast(String city) {
-        getResponseFromServer(city);
-    }
-
-    private void getResponseFromServer(String city) {
         mWeatherService = ApiClientWeather.getClient().create(WeatherService.class);
         Call<BaseResponse> responseCall = mWeatherService.getWeather(city);
         responseCall.enqueue(new Callback<BaseResponse>() {
@@ -42,7 +39,7 @@ public class ForecastFormingModel extends MainModel {
             public void onResponse(Call<BaseResponse> call, Response<BaseResponse> response) {
                 mBaseResponse = response.body();
                 if (mBaseResponse == null) {
-                    mMainPresenter.treatError(AppToGetContext.getContext().getString(R.string.no_server_responce));
+                    mMainPresenter.treatError(R.string.no_server_responce);
                 } else {
                     formForecastList();
                     mMainPresenter.treatForecastResponse(mWeatherList);
@@ -51,7 +48,8 @@ public class ForecastFormingModel extends MainModel {
 
             @Override
             public void onFailure(Call<BaseResponse> call, Throwable t) {
-                mMainPresenter.treatError("failure " + t.getMessage());
+                mMainPresenter.treatError(R.string.error_message);
+                Log.e("getWeatherFromServer", t.getMessage());
             }
         });
     }

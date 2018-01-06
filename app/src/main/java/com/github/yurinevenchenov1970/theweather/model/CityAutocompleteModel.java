@@ -1,5 +1,8 @@
 package com.github.yurinevenchenov1970.theweather.model;
 
+import android.util.Log;
+
+import com.github.yurinevenchenov1970.theweather.R;
 import com.github.yurinevenchenov1970.theweather.bean.CitiesList;
 import com.github.yurinevenchenov1970.theweather.bean.City;
 import com.github.yurinevenchenov1970.theweather.net.ApiClientCity;
@@ -46,7 +49,8 @@ public class CityAutocompleteModel extends MainModel {
 
             @Override
             public void onFailure(Call<CitiesList> call, Throwable t) {
-                mMainPresenter.treatError("failure " + t.getMessage());
+                mMainPresenter.treatError(R.string.error_message);
+                Log.e("getCitiesFromServer", t.getMessage());
             }
         });
     }

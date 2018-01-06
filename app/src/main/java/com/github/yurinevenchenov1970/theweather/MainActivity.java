@@ -28,12 +28,11 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     private MainPresenter mMainPresenter;
     private int mForecastLength;
-    private int mCityUserInputLength;
     private String mCity;
-    private SimpleWeatherListAdapter mWeatherListAdapter;
+    private ArrayList<String> mAvailableCitiesList = new ArrayList<>();
     private ArrayAdapter mCitiesListAdapter;
     private ArrayList<SimpleWeatherToShow> mWeatherList = new ArrayList<>();
-    private ArrayList<String> mAvailableCitiesList = new ArrayList<>();
+    private SimpleWeatherListAdapter mWeatherListAdapter;
 
     @BindView(R.id.city_edit_text)
     EditText mCityTextView;
@@ -65,7 +64,6 @@ public class MainActivity extends AppCompatActivity implements MainView {
 
     @OnTextChanged(R.id.city_edit_text)
     void onCityEditTextChanged(CharSequence city, int start, int count, int after) {
-        mCityUserInputLength = city.toString().length();
         mMainPresenter.treatCityViewChanges(city.toString());
     }
 
@@ -77,50 +75,26 @@ public class MainActivity extends AppCompatActivity implements MainView {
                 mAvailableCitiesList);
         mCitiesListView.setAdapter(mCitiesListAdapter);
 
-        if (mCityUserInputLength > 0) {
-            showCitiesList();
-        } else {
-            hideCitiesList();
-            mWeatherList.clear();
-            mWeatherListAdapter.notifyDataSetChanged();
-        }
+        showCitiesList();
 
         mCitiesListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 mCity = mAvailableCitiesList.get(position);
                 mCityTextView.setText(mCity);
-                hideCitiesList();
                 mMainPresenter.treatCitySelection(mCity);
             }
         });
     }
 
     @Override
-    public int getForecastLength() {
-        return mForecastLength;
+    public void hideCitiesList() {
+        mCitiesListView.setVisibility(View.GONE);
     }
 
-    private void initForecastLengthFader() {
-        mSeekBar.setOnSeekBarChangeListener(
-                new SeekBar.OnSeekBarChangeListener() {
-
-                    @Override
-                    public void onProgressChanged(SeekBar seekBar,
-                                                  int progressValue, boolean fromUser) {
-                        mForecastLength = progressValue;
-                    }
-
-                    @Override
-                    public void onStartTrackingTouch(SeekBar seekBar) {
-                    }
-
-                    @Override
-                    public void onStopTrackingTouch(SeekBar seekBar) {
-                        fillForecastLength(mForecastLength);
-                        mMainPresenter.treatForecastLengthChanges(mForecastLength);
-                    }
-                });
+    @Override
+    public int getForecastLength() {
+        return mForecastLength;
     }
 
     @Override
@@ -131,7 +105,45 @@ public class MainActivity extends AppCompatActivity implements MainView {
                 android.R.layout.simple_list_item_1,
                 mWeatherList);
         mWeatherListView.setAdapter(mWeatherListAdapter);
-        hideCitiesList();
+    }
+
+    @Override
+    public void hideForecast() {
+        try {
+            mWeatherList.clear();
+            mWeatherListAdapter.notifyDataSetChanged();
+        } catch (NullPointerException e) {
+            //no need to do smth
+        }
+    }
+
+    @Override
+    public void showError(int errorDescription) {
+        Toast.makeText(this, getString(errorDescription), Toast.LENGTH_LONG).show();
+    }
+
+    //region private methods
+
+    private void initForecastLengthFader() {
+        mSeekBar.setOnSeekBarChangeListener(
+                new SeekBar.OnSeekBarChangeListener() {
+
+                    @Override
+                    public void onProgressChanged(SeekBar seekBar,
+                                                  int progressValue, boolean fromUser) {
+                        mForecastLength = progressValue;
+                        fillForecastLength(mForecastLength);
+                    }
+
+                    @Override
+                    public void onStartTrackingTouch(SeekBar seekBar) {
+                    }
+
+                    @Override
+                    public void onStopTrackingTouch(SeekBar seekBar) {
+                        mMainPresenter.treatForecastLengthChanges(mForecastLength);
+                    }
+                });
     }
 
     private void fillForecastLength(int progress) {
@@ -154,11 +166,5 @@ public class MainActivity extends AppCompatActivity implements MainView {
         mCitiesListView.bringToFront();
     }
 
-    private void hideCitiesList() {
-        mCitiesListView.setVisibility(View.GONE);
-    }
-
-    public void showError(String errorDescription) {
-        Toast.makeText(this, errorDescription, Toast.LENGTH_LONG).show();
-    }
+    //endregion
 }

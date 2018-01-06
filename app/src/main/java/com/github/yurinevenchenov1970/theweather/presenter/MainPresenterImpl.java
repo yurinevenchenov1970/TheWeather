@@ -1,6 +1,5 @@
 package com.github.yurinevenchenov1970.theweather.presenter;
 
-import com.github.yurinevenchenov1970.theweather.AppToGetContext;
 import com.github.yurinevenchenov1970.theweather.R;
 import com.github.yurinevenchenov1970.theweather.bean.SimpleWeatherToShow;
 import com.github.yurinevenchenov1970.theweather.model.CityAutocompleteModel;
@@ -31,21 +30,16 @@ public class MainPresenterImpl implements MainPresenter {
 
     @Override
     public void treatCityViewChanges(String partialCity) {
-        getCitiesList(partialCity);
-    }
-
-    @Override
-    public void getCitiesList(String partialCity) {
-        mCityAutocompleteModel.getCitiesListFromServer(partialCity);
+        if(partialCity.length() > 0) {
+            mCityAutocompleteModel.getCitiesListFromServer(partialCity);
+        } else {
+            mMainView.hideCitiesList();
+            mMainView.hideForecast();
+        }
     }
 
     @Override
     public void treatCityResponse(List<String> citiesList) {
-        showAvailableCitiesList(citiesList);
-    }
-
-    @Override
-    public void showAvailableCitiesList(List<String> citiesList) {
         mMainView.showAvailableCitiesList(citiesList);
     }
 
@@ -73,7 +67,7 @@ public class MainPresenterImpl implements MainPresenter {
     @Override
     public void treatForecastResponse(List<SimpleWeatherToShow> weatherList) {
         if (weatherList == null) {
-            treatError(AppToGetContext.getContext().getString(R.string.missing_forecast_for_the_city));
+            treatError(R.string.missing_forecast_for_the_city);
         } else {
             mForecastList = weatherList;
             int forecastLength = mMainView.getForecastLength();
@@ -83,19 +77,20 @@ public class MainPresenterImpl implements MainPresenter {
 
     @Override
     public void showForecast(int forecastLength) {
-        if (forecastLength + 1 < mForecastList.size()) {
+        if (forecastLength + 1 <= mForecastList.size()) {
             forecastLength += 1;
         }
+        mMainView.hideCitiesList();
         mMainView.showForecast(new ArrayList<>(mForecastList.subList(0, forecastLength)));
     }
 
     @Override
-    public void treatError(String errorDescription) {
+    public void treatError(int errorDescription) {
         showError(errorDescription);
     }
 
     @Override
-    public void showError(String errorDescription) {
+    public void showError(int errorDescription) {
         mMainView.showError(errorDescription);
     }
 }
