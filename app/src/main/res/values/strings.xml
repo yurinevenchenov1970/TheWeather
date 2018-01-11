@@ -11,4 +11,5 @@
     <string name="city_error_message">Введите корректно город... Скорее всего, Вы выбрали из списка страну.</string>
     <string name="no_server_responce">Нет ответа с сервера</string>
     <string name="missing_forecast_for_the_city">Нет прогноза для этого города... :-(</string>
+    <string name="no_internet_connection">Нет интернет-соединения</string>
 </resources>

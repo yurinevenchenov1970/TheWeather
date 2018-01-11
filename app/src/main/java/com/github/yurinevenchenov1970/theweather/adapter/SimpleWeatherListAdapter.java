@@ -9,8 +9,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.github.yurinevenchenov1970.theweather.AppToGetContext;
 import com.github.yurinevenchenov1970.theweather.R;
+import com.github.yurinevenchenov1970.theweather.WeatherApp;
 import com.github.yurinevenchenov1970.theweather.bean.SimpleWeatherToShow;
 import com.squareup.picasso.Picasso;
 
@@ -52,12 +52,11 @@ public class SimpleWeatherListAdapter extends ArrayAdapter<SimpleWeatherToShow> 
     @Override
     public View getView(int position, View convertView, @NonNull ViewGroup parent) {
 
-
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         convertView = inflater.inflate(R.layout.weather_list_item, null);
         ButterKnife.bind(this, convertView);
         mDateTextView.setText(mSimpleWeatherToShow.get(position).getDataString());
-        Picasso.with(AppToGetContext.getContext()).load(mSimpleWeatherToShow.get(position).getIconPath())
+        Picasso.with(WeatherApp.getContext()).load(mSimpleWeatherToShow.get(position).getIconPath())
                 .into(mIconImageView);
         mTemperatureTextView.setText(mSimpleWeatherToShow.get(position).getTemperatureString());
         mWindTextView.setText(mSimpleWeatherToShow.get(position).getWindString());

@@ -6,7 +6,6 @@ import com.github.yurinevenchenov1970.theweather.bean.SimpleForecastDay;
 import com.github.yurinevenchenov1970.theweather.bean.SimpleWeatherToShow;
 import com.github.yurinevenchenov1970.theweather.bean.TextForecast;
 import com.github.yurinevenchenov1970.theweather.bean.TextForecastDay;
-import com.github.yurinevenchenov1970.theweather.bean.TextWeatherToShow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,15 +16,11 @@ import java.util.List;
 
 public class WeatherExtractor {
 
-    private BaseResponse mBaseResponse;
-    private TextWeatherToShow mTextWeatherToShow;
-    private SimpleWeatherToShow mSimpleWeatherToShow;
-
-    public static List<String> extractTextWeatherToShow(BaseResponse response, int forecastLength) {
+    public static List<String> extractTextWeatherToShow(BaseResponse response) {
         TextForecast textForecast = response.getForecast().getTextForecast();
         List<TextForecastDay> list = textForecast.getTextForecastDayList();
         List<String> textWeatherArray = new ArrayList<>();
-        for (int i = 0; i < forecastLength; i++) {
+        for (int i = 0; i < list.size(); i++) {
             String dayInForecast;
             int period = list.get(i).getPeriod();
             if (period == 0) {

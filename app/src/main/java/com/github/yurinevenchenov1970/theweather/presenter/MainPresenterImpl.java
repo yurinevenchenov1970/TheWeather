@@ -30,11 +30,12 @@ public class MainPresenterImpl implements MainPresenter {
 
     @Override
     public void treatCityViewChanges(String partialCity) {
-        if(partialCity.length() > 0) {
+        if (partialCity.length() > 0) {
             mCityAutocompleteModel.getCitiesListFromServer(partialCity);
         } else {
             mMainView.hideCitiesList();
             mMainView.hideForecast();
+            mCity = null;
         }
     }
 
